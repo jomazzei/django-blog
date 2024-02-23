@@ -11,11 +11,16 @@ class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
     # Slug is a term for article in production, for Django it will build the URL for posts.
     slug = models.SlugField(max_length=200, unique=True)
-    # 1 User can have multiple posts, 1-to-many / Foreign Key. on delete of user account "CASCADE" will also delete all user's posts
+    # 1 User can have multiple posts, 1-to-many / Foreign Key. on delete of user account "CASCADE" will also delete all user's posts, 
+    # "RESTRICT" will require the posts to be manually deleted one by one
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
     # Main blog article content
     content = models.TextField()
+    # Optional summary / teaser visible on main page
+    excerpt = models.TextField(blank=True)
     # Time of creation, "auto_now_add=True" means default created time is time of post entry
     created_on = models.DateTimeField(auto_now_add=True)
+    # Time of update / edit of post, auto_now is when it is saved, not just created
+    updated_on = models.DateTimeField(auto_now=True)
     # A draft is defined as zero and published as one, so you can see the default is to save as a draft.
     status = models.IntegerField(choices=STATUS, default=0)
