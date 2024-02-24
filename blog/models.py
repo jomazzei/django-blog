@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Tuple constant defines post state
 STATUS = ((0, "Draft"), (1, "Published"))
+APPROVE = ((0, "Not approved"), (1, "Approved"))
 
 
 # Create your models here.
@@ -24,3 +25,11 @@ class Post(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     # A draft is defined as zero and published as one, so you can see the default is to save as a draft.
     status = models.IntegerField(choices=STATUS, default=0)
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    body = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
