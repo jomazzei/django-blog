@@ -1,3 +1,5 @@
+# Http needs to be imported before render
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.contrib import messages
@@ -53,6 +55,9 @@ def post_detail(request, slug):
                 request, messages.SUCCESS,
                 'Comment submitted and awaiting approval'
             )
+            # return redirect makes it so the page is automatically reloaded with a fresh form on submission. 
+            # This prevents the form resubmitting twice when page is refreshed manually through browser
+            return HttpResponseRedirect(request.path_info)
 
     comment_form = CommentForm()
 

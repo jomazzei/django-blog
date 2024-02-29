@@ -1,3 +1,5 @@
+# Http needs to be imported before render
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
 from .models import About
@@ -15,6 +17,9 @@ def about_me(request):
         if collaborate_form.is_valid():
             collaborate_form.save()
             messages.add_message(request, messages.SUCCESS, "Collaboration request received! I endeavour to respond within 2 working days.")
+            # return redirect makes it so the page is automatically reloaded with a fresh form on submission. 
+            # This prevents the form resubmitting twice when page is refreshed manually through browser
+            return HttpResponseRedirect(request.path_info)
 
     about = About.objects.all().order_by('-updated_on').first()
     # Creates empty form instance
