@@ -32,9 +32,18 @@ def post_detail(request, slug):
     comment_count = post.comments.filter(approved=True).count()
 
     if request.method == "POST":
+        print("Received comment POST req")
         comment_form = CommentForm(data=request.POST)
 
+        # The is_valid() method checks our model to see the constraints on our fields.
+        # For example, the default behaviour in Django is that a field cannot be null.
+        # The is_valid() method makes sure we don't try to write a null value to the database.
+        # It also helps improve the security of our system because, even if an attacker bypasses the front-end form HTML validation, we still check it on the back-end.
         if comment_form.is_valid():
+            # Call the comment_form's save method with commit=False. 
+            # Calling the save method with commit=False returns an object that hasn't yet been saved to the database, so it can be further modified. 
+            # We do this because we need to populate the post and author fields before we save. 
+            # The object will not be written to the database until we call the save method again.
             comment = comment_form.save(commit=False)
             comment.author = request.user
             comment.post = post
@@ -47,6 +56,7 @@ def post_detail(request, slug):
 
     comment_form = CommentForm()
 
+    print("Rendering blog post template")
     return render(
         request,
         "blog/post_detail.html",
