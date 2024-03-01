@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "gitpod.gitpod-remote-ssh",
+        "redhat.vscode-yaml"
+    ]
+}
