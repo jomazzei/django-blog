@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 # Tuple constant defines post state
 STATUS = ((0, "Draft"), (1, "Published"))
@@ -15,6 +16,8 @@ class Post(models.Model):
     # 1 User can have multiple posts, 1-to-many / Foreign Key. on delete of user account "CASCADE" will also delete all user's posts, 
     # "RESTRICT" will require the posts to be manually deleted one by one
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
+    # Cloudinary image field
+    featured_image = CloudinaryField('image', default='placeholder')
     # Main blog article content
     content = models.TextField()
     # Optional summary / teaser visible on main page
