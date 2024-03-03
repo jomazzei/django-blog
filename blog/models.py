@@ -9,13 +9,17 @@ APPROVE = ((0, "Not approved"), (1, "Approved"))
 
 # Create your models here.
 class Post(models.Model):
+    """
+    Stores a single blog post entry related to :model:`auth.User`
+    """
     # Unique so that there can't be posts with the same title, max length is 200 char for the title.
     title = models.CharField(max_length=200, unique=True)
     # Slug is a term for article in production, for Django it will build the URL for posts.
     slug = models.SlugField(max_length=200, unique=True)
     # 1 User can have multiple posts, 1-to-many / Foreign Key. on delete of user account "CASCADE" will also delete all user's posts, 
     # "RESTRICT" will require the posts to be manually deleted one by one
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_posts")
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name="blog_posts")
     # Cloudinary image field
     featured_image = CloudinaryField('image', default='placeholder')
     # Main blog article content
@@ -33,17 +37,23 @@ class Post(models.Model):
         # - =Descending, most recent at the top, ? =Randomized, blank =Ascending, oldest first
         # First descends through created_on, then ascends that list in author
         ordering = ["-created_on", "author"]
-        
+
     def __str__(self):
         # Returns the title of post in the string instead of "PostObject1"
         return f"{self.title} | Written by {self.author}"
 
 
 class Comment(models.Model):
+    """
+    Stores a single comment entry related to :model:`auth.User`
+    and :model:`blog.Post`.
+    """
     # Post and Author are a 1-to-many relation, 1 user can have multiple posts/comments,
     # so they must be Foreign Keys. On delete of post or account, all comments will be deleted.
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                             related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name="commenter")
     body = models.TextField()
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)

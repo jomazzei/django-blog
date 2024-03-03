@@ -9,7 +9,19 @@ from .forms import CollaborateForm
 # Create your views here.
 def about_me(request):
     """
-    Renders the About page
+    Renders the most recent information on the website author
+    and allows user collaboration requests.
+
+    Displays an individual instance of :model:`about.About`.
+
+    **Context**
+    ``about``
+        The most recent instance of :model:`about.About`.
+        ``collaborate_form``
+            An instance of :form:`about.CollaborateForm`.
+    
+    **Template**
+    :template:`about/about.html`
     """
     # POST req check above empty instance call so that form clears on submission
     if request.method == "POST":
