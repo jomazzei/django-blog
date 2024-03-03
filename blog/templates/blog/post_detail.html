@@ -69,10 +69,10 @@
                     {% endif %}
                     <!-- Edit comment button -->
                     {% if user.is_authenticated and comment.author == user %}
-                    <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
+                    <button class="btn btn-edit" data-comment_id="{{ comment.id }}">Edit</button>
                     {% endif %}
                     <!-- Delete comment button -->
-                    <button class="btn btn-delete" comment_id="{{ comment.id }}">Delete</button>
+                    <button class="btn btn-delete" data-comment_id="{{ comment.id }}">Delete</button>
                 </div>
                 <!-- Our for loop ends here -->
                 {% endfor %}
